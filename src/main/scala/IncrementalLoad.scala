@@ -119,7 +119,7 @@ object IncrementalLoad extends App{
     .withColumn("Transaction_Type", regexp_replace(col("Transaction_Type"), " ", ""))
   transaction_cleaned_df.groupBy("Transaction_Type").count().show()
 
-  transaction_cleaned_df.printSchema()
+//  transaction_cleaned_df.printSchema()
 
   Accounts_cleaned_df.show()
   customers_cleaned_df.show()
