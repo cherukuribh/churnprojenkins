@@ -7,7 +7,6 @@ import org.apache.log4j.{Level, Logger}
 
 import java.util.Properties
 object IncrementalLoad extends App{
-  Logger.getLogger("org").setLevel(Level.WARN)
   // Create a SparkSession
   val spark = SparkSession.builder()
     .appName("Data_Incremental")
