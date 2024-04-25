@@ -124,14 +124,14 @@ object IncrementalLoad extends App{
   customers_cleaned_df.show()
   transaction_cleaned_df.show()
 
-//  Accounts_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-//    .option("dbtable","accounts_table").option("driver","org.postgresql.Driver").option("user", "consultants")
-//    .option("password", "WelcomeItc@2022").mode("append").save()
-//  customers_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-//    .option("dbtable","customers_table").option("driver","org.postgresql.Driver").option("user", "consultants")
-//    .option("password", "WelcomeItc@2022").mode("append").save()
-//  transaction_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-//    .option("dbtable","transactions_table").option("driver","org.postgresql.Driver").option("user", "consultants")
-//    .option("password", "WelcomeItc@2022").mode("append").save()
+  Accounts_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
+    .option("dbtable","accounts_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("password", "WelcomeItc@2022").mode("append").save()
+  customers_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
+    .option("dbtable","customers_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("password", "WelcomeItc@2022").mode("append").save()
+  transaction_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
+    .option("dbtable","transactions_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("password", "WelcomeItc@2022").mode("append").save()
 
 }
