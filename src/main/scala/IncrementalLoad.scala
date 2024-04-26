@@ -134,4 +134,9 @@ object IncrementalLoad extends App{
     .option("dbtable","transactions_table").option("driver","org.postgresql.Driver").option("user", "consultants")
     .option("password", "WelcomeItc@2022").mode("append").save()
 
+  Accounts_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(3))
+  customers_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(4))
+  transaction_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(5))
+
+
 }
