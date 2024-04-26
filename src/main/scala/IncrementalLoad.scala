@@ -134,9 +134,17 @@ object IncrementalLoad extends App{
     .option("dbtable","transactions_table").option("driver","org.postgresql.Driver").option("user", "consultants")
     .option("password", "WelcomeItc@2022").mode("append").save()
 
-  Accounts_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(3))
-  customers_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(4))
-  transaction_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(5))
+  val Accounts_cleaned_df_single_partition = Accounts_cleaned_df.coalesce(1)
+val customers_cleaned_df_single_partition = customers_cleaned_df.coalesce(1)
+  val transaction_cleaned_df_single_partition = transaction_cleaned_df.coalesce(1)
+
+  Accounts_cleaned_df_single_partition.write.mode("append").option("header", "true").csv(args(3))
+  customers_cleaned_df_single_partition.write.mode("append").option("header", "true").csv(args(4))
+  transaction_cleaned_df_single_partition.write.mode("append").option("header", "true").csv(args(5))
+
+  // Accounts_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(3))
+//  customers_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(4))
+//  transaction_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(5))
 
 
 }
