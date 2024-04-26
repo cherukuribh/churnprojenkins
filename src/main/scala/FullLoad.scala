@@ -139,11 +139,11 @@ object FullLoad {
     customers_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(4))
     transaction_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(5))
 
-    Accounts_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.accountstable")
-    println("after acocunt_table in hive")
-    customers_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.customerstable")
-    println("after customers_table in hive")
-    transaction_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.transactionstable")
-    println("after transaction_table in hive ")
+//    Accounts_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.accountstable")
+//    println("after acocunt_table in hive")
+//    customers_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.customerstable")
+//    println("after customers_table in hive")
+//    transaction_cleaned_df.write.mode("ignore").format("csv").option("header", "true").saveAsTable("ukusmar.transactionstable")
+//    println("after transaction_table in hive ")
   }
 }
