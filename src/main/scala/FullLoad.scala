@@ -4,9 +4,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.apache.spark.SparkConf
 import org.apache.log4j.{Level, Logger}
-
 import java.util.Properties
-
 
 object FullLoad {
   def main(args: Array[String]): Unit = {
@@ -15,6 +13,7 @@ object FullLoad {
    // Logger.getLogger("org").setLevel(Level.WARN)
     val spark = SparkSession.builder()
       .appName("Data_cleaning")
+      .enableHiveSupport()
       .getOrCreate()
 
     // accounts table Dataframe Schema
@@ -140,5 +139,11 @@ object FullLoad {
     customers_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(4))
     transaction_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(5))
 
+    Accounts_cleaned_df.write.mode("overwrite").format("csv").option("header", "true").saveAsTable("ukusmar.accounts_table")
+    println("after acocunt_table in hive")
+    customers_cleaned_df.write.mode("overwrite").format("csv").option("header", "true").saveAsTable("ukusmar.customers_table")
+    println("after customers_table in hive")
+    transaction_cleaned_df.write.mode("overwrite").format("csv").option("header", "true").saveAsTable("ukusmar.transactions_table")
+    println("after transaction_table in hive ")
   }
 }
