@@ -136,6 +136,9 @@ object FullLoad {
     transaction_cleaned_df.write.format("jdbc").option("url", "jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
       .option("dbtable", "transactions_table").option("driver", "org.postgresql.Driver").option("user", "consultants")
       .option("password", "WelcomeItc@2022").save()
+    Accounts_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(3))
+    customers_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(4))
+    transaction_cleaned_df.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(5))
 
   }
 }
