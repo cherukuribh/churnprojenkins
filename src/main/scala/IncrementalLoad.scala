@@ -10,6 +10,7 @@ object IncrementalLoad extends App{
   // Create a SparkSession
   val spark = SparkSession.builder()
     .appName("Data_Incremental")
+    .enableHiveSupport()
     .getOrCreate()
 
   val accountSchemaddl = "Account_ID Long,Customer_ID Int,Account_Type String,Balance String," +
@@ -125,13 +126,13 @@ object IncrementalLoad extends App{
   transaction_cleaned_df.show()
 
   Accounts_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-    .option("dbtable","accounts_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("dbtable","accountstable").option("driver","org.postgresql.Driver").option("user", "consultants")
     .option("password", "WelcomeItc@2022").mode("append").save()
   customers_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-    .option("dbtable","customers_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("dbtable","customerstable").option("driver","org.postgresql.Driver").option("user", "consultants")
     .option("password", "WelcomeItc@2022").mode("append").save()
   transaction_cleaned_df.write.format("jdbc").option("url","jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-    .option("dbtable","transactions_table").option("driver","org.postgresql.Driver").option("user", "consultants")
+    .option("dbtable","transactionstable").option("driver","org.postgresql.Driver").option("user", "consultants")
     .option("password", "WelcomeItc@2022").mode("append").save()
 
   val Accounts_cleaned_df_single_partition = Accounts_cleaned_df.coalesce(1)
@@ -142,9 +143,12 @@ val customers_cleaned_df_single_partition = customers_cleaned_df.coalesce(1)
   customers_cleaned_df_single_partition.write.mode("append").option("header", "true").csv(args(4))
   transaction_cleaned_df_single_partition.write.mode("append").option("header", "true").csv(args(5))
 
-  // Accounts_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(3))
-//  customers_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(4))
-//  transaction_cleaned_df.coalesce(1).write.mode("append").option("header", "true").csv(args(5))
+  Accounts_cleaned_df_single_partition.write.mode("append").option("header", "true").saveAsTable("ukusmar.accountstable")
+  println("after acocunt_table in hive")
+  customers_cleaned_df_single_partition.write.mode("append").option("header", "true").saveAsTable("ukusmar.customerstable")
+  println("after customers_table in hive")
+  transaction_cleaned_df_single_partition.write.mode("append").option("header", "true").saveAsTable("ukusmar.transactionstable")
+  println("after transaction_table in hive ")
 
 
 }
