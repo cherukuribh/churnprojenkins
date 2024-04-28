@@ -29,11 +29,11 @@ object deleteDB extends App {
   import spark.implicits._
 
   accounts_df.createOrReplaceTempView("accounts")
-  spark.sql("select * from accounts").show(5)
+  spark.sql("select * from accounts").show(30)
   customers_df.createOrReplaceTempView("customers")
-  spark.sql("select * from customers").show(5)
+  spark.sql("select * from customers").show(30)
   transactions_df.createOrReplaceTempView("transactions")
-  spark.sql("select * from transactions").show(5)
+  spark.sql("select * from transactions").show(30)
 
   val deleteschemaddl = "Account_ID Int"
   var deletes_df = spark.read.option("header", "true")
@@ -59,10 +59,11 @@ object deleteDB extends App {
     val condition = s"Customer_ID = $customerId"
 
     // Delete corresponding records from the accounts and customers tables
-     accounts_df = accounts_df.filter(!$"Customer_ID".isin(customerId))
+    accounts_df = accounts_df.filter(!$"Customer_ID".isin(customerId))
     customers_df = customers_df.filter(!$"Customer_ID".isin(customerId))
 
     transactions_df = transactions_df.filter(!$"Account_ID".isin(accountId))
+  }
     accounts_df.show(30)
     customers_df.show(30)
     transactions_df.show(30)
@@ -91,7 +92,6 @@ object deleteDB extends App {
 //    println("after transaction_table in hive ")
 
 
-  }
 
 
 
