@@ -114,24 +114,54 @@ object UpdateDB extends App {
 
 
 
-//  val tableName = "customerstable"
-//
-//  val sqlQuery = s"DROP TABLE IF EXISTS $tableName"
-//
-//  spark.sql(sqlQuery)
+  println("updating the customers table in DB")
+  updatedCustomersDF.write.format("jdbc").option("url", "jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
+    .option("dbtable", "customers_table").option("driver", "org.postgresql.Driver").option("user", "consultants")
+    .option("password", "WelcomeItc@2022").save()
 
-  // Write the updated DataFrame back to PostgreSQL
-//  updatedCustomersDF.write
-//    .mode(SaveMode.Overwrite)
-//    .format("jdbc")
-//    .option("url", "jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb")
-//    .option("dbtable", "customerstable")
-//    .option("driver", "org.postgresql.Driver")
-//    .option("user", "consultants")
-//    .option("password", "WelcomeItc@2022")
-//    .save()
-
-//  updatedCustomersDF.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(1))
+ updatedCustomersDF.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(1))
   updatedCustomersDF.write.mode("overwrite").option("header", "true").saveAsTable("ukusmar.customerstable")
-  println("after customers_table in hive")
+  println("after customerstable in hive")
+
+
+  ////////////////////////////
+  import java.sql.{Connection, DriverManager, Statement}
+
+  // JDBC connection parameters
+  val jdbcUrl = "jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb"
+  val username = "consultants"
+  val password = "WelcomeItc@2022"
+
+  // Create a JDBC connection
+  var connection: Connection = null
+  try {
+    connection = DriverManager.getConnection(jdbcUrl, username, password)
+    val statement = connection.createStatement()
+
+    // Replace "your_table_name" with the name of the table you want to drop
+    val tableName = "customerstable"
+
+    // Drop the table
+    val sql = s"DROP TABLE IF EXISTS $tableName"
+    statement.executeUpdate(sql)
+
+    println(s"Table $tableName dropped successfully.")
+    // Rename customerstable to customers_table
+    val renameSql = "ALTER TABLE customers_table RENAME TO customerstable"
+    statement.executeUpdate(renameSql)
+    println("Table customers_table renamed to customerstable successfully.")
+  } catch {
+    case e: Exception =>
+      e.printStackTrace()
+  } finally {
+    if (connection != null) {
+      connection.close()
+    }
+  }
+
+
+  //////////////////////////////////
+
+
 }
+
