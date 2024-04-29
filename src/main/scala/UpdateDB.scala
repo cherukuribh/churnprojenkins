@@ -9,12 +9,14 @@ import org.apache.spark.sql.DataFrame
 import java.util.Properties
 import java.sql.{Connection, DriverManager, Statement}
 import org.apache.spark.sql.{SaveMode, SparkSession}
+import java.sql.{Connection, DriverManager, Statement}
 
 object UpdateDB extends App {
   Logger.getLogger("org").setLevel(Level.WARN)
   val spark = SparkSession.builder()
     .appName("DB updates")
     .master("local[1]")
+    .enableHiveSupport()
     .getOrCreate()
 
   val customersSchemaddl = StructType(Seq(
@@ -103,6 +105,7 @@ object UpdateDB extends App {
     .withColumn("Phone_Number", when($"New_Phone_Number".isNotNull, $"New_Phone_Number").otherwise($"Phone_Number"))
     .drop("Old_Phone_Number", "New_Phone_Number", "UCustomer_ID")
 
+
   // Show the updated DataFrame
   updatedCustomersDF.show()
 
@@ -111,13 +114,12 @@ object UpdateDB extends App {
 
 
 
-
-//  //
-//  val tableName = "customers_table"
+//  val tableName = "customerstable"
 //
 //  val sqlQuery = s"DROP TABLE IF EXISTS $tableName"
 //
 //  spark.sql(sqlQuery)
+
   // Write the updated DataFrame back to PostgreSQL
 //  updatedCustomersDF.write
 //    .mode(SaveMode.Overwrite)
@@ -130,6 +132,6 @@ object UpdateDB extends App {
 //    .save()
 
 //  updatedCustomersDF.coalesce(1).write.mode("overwrite").option("header", "true").csv(args(1))
-//  updatedCustomersDF.write.mode("overwrite").option("header", "true").saveAsTable("ukusmar.customerstable")
-//  println("after customers_table in hive")
+  updatedCustomersDF.write.mode("overwrite").option("header", "true").saveAsTable("ukusmar.customerstable")
+  println("after customers_table in hive")
 }
