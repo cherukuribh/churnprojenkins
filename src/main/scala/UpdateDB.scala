@@ -15,7 +15,7 @@ object UpdateDB extends App {
   Logger.getLogger("org").setLevel(Level.WARN)
   val spark = SparkSession.builder()
     .appName("DB updates")
-    .master("local[1]")
+   // .master("local[1]")
     .enableHiveSupport()
     .getOrCreate()
 
@@ -50,8 +50,8 @@ object UpdateDB extends App {
   val updateschemaddl = "UCustomer_ID Int,Old_Phone_Number String,New_Phone_Number String"
   var updates_df = spark.read.option("header", "true")
     .schema(updateschemaddl)
-    //  .csv(args(0))
-    .csv("D:\\spark_code\\untitled\\Project-Input\\update.csv")
+     .csv(args(0))
+   // .csv("D:\\spark_code\\untitled\\Project-Input\\update.csv")
 
   updates_df.show()
   updates_df.createOrReplaceTempView("update")
